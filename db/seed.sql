@@ -1,22 +1,22 @@
 -- Mock data for local testing: ~100 rows per table, generated via generate_series/random().
 -- Run schema.sql (create tables) before this file.
 
-INSERT INTO user_info (name, email, date_of_birth, address, ssn, pass_hash, risk_profile)
+INSERT INTO user_info (name, email, date_of_birth, address, ssn, pass_hash)
 SELECT
     'User ' || i,
     'user' || i || '@example.com',
     (DATE '1950-01-01' + (random() * 20000)::int),
     (100 + i) || ' Test St, Springfield',
     lpad(i::text, 3, '0') || '-' || lpad((i * 7 % 100)::text, 2, '0') || '-' || lpad((i * 13 % 10000)::text, 4, '0'),
-    '$2b$12$fakehash' || i,
-    (ARRAY['Low', 'Balanced', 'High'])[floor(random() * 3 + 1)]
+    '$2b$12$fakehash' || i
 FROM generate_series(1, 100) AS i;
 
-INSERT INTO accounts (user_id, balance, role, created_at)
+INSERT INTO accounts (user_id, balance, role, portfolio_size, created_at)
 SELECT
     i,
     round((random() * 100000)::numeric, 4),
     (ARRAY['USER', 'USER', 'USER', 'USER', 'ADMIN', 'ANALYTIC'])[floor(random() * 6 + 1)],
+    (ARRAY['Low', 'Balanced', 'High'])[floor(random() * 3 + 1)],
     NOW() - (random() * INTERVAL '365 days')
 FROM generate_series(1, 100) AS i;
 
@@ -65,3 +65,12 @@ FROM (
         NOW() - (random() * INTERVAL '365 days') AS created
     FROM generate_series(1, 100) AS i
 ) sub;
+
+INSERT INTO transactions (amount, side, account_id, transaction_type, happened_at)
+SELECT
+    round((random() * 5000 + 10)::numeric, 4),
+    (ARRAY['IN', 'OUT'])[floor(random() * 2 + 1)],
+    floor(random() * 100 + 1)::int,
+    (ARRAY['TRADE', 'WITHDRAWL', 'DEPOSIT'])[floor(random() * 3 + 1)],
+    NOW() - (random() * INTERVAL '365 days')
+FROM generate_series(1, 100) AS i;
