@@ -1,16 +1,16 @@
 DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS positions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
-DROP TABLE IF EXISTS transactions;
 CREATE TABLE user_info(
 	user_id 		SERIAL PRIMARY KEY,
 	name			TEXT NOT NULL,
 	email			TEXT NOT NULL UNIQUE,
 	date_of_birth	DATE NOT NULL,
 	address			TEXT NOT NULL,
-	ssn				TEXT NOT NULL UNIQUE,
+	ssn_hash		TEXT NOT NULL UNIQUE,
 	pass_hash		TEXT NOT NULL
 );
 

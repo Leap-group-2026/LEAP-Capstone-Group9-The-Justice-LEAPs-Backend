@@ -1,13 +1,13 @@
 -- Mock data for local testing: ~100 rows per table, generated via generate_series/random().
 -- Run schema.sql (create tables) before this file.
 
-INSERT INTO user_info (name, email, date_of_birth, address, ssn, pass_hash)
+INSERT INTO user_info (name, email, date_of_birth, address, ssn_hash, pass_hash)
 SELECT
     'User ' || i,
     'user' || i || '@example.com',
     (DATE '1950-01-01' + (random() * 20000)::int),
     (100 + i) || ' Test St, Springfield',
-    lpad(i::text, 3, '0') || '-' || lpad((i * 7 % 100)::text, 2, '0') || '-' || lpad((i * 13 % 10000)::text, 4, '0'),
+    '$2b$12$fakessnhash' || i,
     '$2b$12$fakehash' || i
 FROM generate_series(1, 100) AS i;
 
