@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS historical_orders;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS positions;
@@ -63,4 +64,12 @@ CREATE TABLE transactions(
 	account_id			INTEGER NOT NULL REFERENCES accounts(account_id),
 	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWL', 'DEPOSIT')),
 	happened_at			TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE TABLE historical_orders(
+    historical_order_id     SERIAL PRIMARY KEY,
+    order_id                INTEGER NOT NULL REFERENCES orders(order_id),
+    account_id              INTEGER NOT NULL REFERENCES accounts(account_id),
+    order_information_json  JSONB NOT NULL,
+    created_at              TIMESTAMP NOT NULL DEFAULT now()
 );

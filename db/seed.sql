@@ -74,3 +74,11 @@ SELECT
     (ARRAY['TRADE', 'WITHDRAWL', 'DEPOSIT'])[floor(random() * 3 + 1)],
     NOW() - (random() * INTERVAL '365 days')
 FROM generate_series(1, 100) AS i;
+
+INSERT INTO historical_orders (order_id, account_id, order_information_json, created_at)
+SELECT
+    order_id,
+    account_id,
+    to_jsonb(o),
+    NOW()
+FROM orders o;
