@@ -11,12 +11,12 @@ SELECT
     '$2b$12$fakehash' || i
 FROM generate_series(1, 100) AS i;
 
-INSERT INTO accounts (user_id, balance, role, portfolio_size, created_at)
+INSERT INTO accounts (user_id, balance, portfolio_size, trade_type, created_at)
 SELECT
     i,
     round((random() * 100000)::numeric, 4),
-    (ARRAY['USER', 'USER', 'USER', 'USER', 'ADMIN', 'ANALYTIC'])[floor(random() * 6 + 1)],
     (ARRAY['Low', 'Balanced', 'High'])[floor(random() * 3 + 1)],
+    (ARRAY['Stocks', 'Bonds', 'ETC'])[floor(random() * 2 + 1)],
     NOW() - (random() * INTERVAL '365 days')
 FROM generate_series(1, 100) AS i;
 
@@ -74,3 +74,13 @@ SELECT
     (ARRAY['TRADE', 'WITHDRAWL', 'DEPOSIT'])[floor(random() * 3 + 1)],
     NOW() - (random() * INTERVAL '365 days')
 FROM generate_series(1, 100) AS i;
+
+INSERT INTO historical_orders (order_id, account_id, order_information_json, created_at)
+SELECT
+    order_id,
+    account_id,
+    to_jsonb(o),
+    NOW()
+FROM orders o;
+
+INSERT INTO admin (username, pass_hash, created_at) VALUES ('admin', '$2b$12$fakehash', NOW());

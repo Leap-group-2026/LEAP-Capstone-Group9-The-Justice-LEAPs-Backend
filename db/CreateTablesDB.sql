@@ -1,9 +1,11 @@
+DROP TABLE IF EXISTS historical_orders;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS positions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
+DROP TABLE IF EXISTS admin;
 CREATE TABLE user_info(
 	user_id 		SERIAL PRIMARY KEY,
 	name			TEXT NOT NULL,
@@ -14,12 +16,19 @@ CREATE TABLE user_info(
 	pass_hash		TEXT NOT NULL
 );
 
+CREATE TABLE admin(
+	admin_id		SERIAL PRIMARY KEY,
+	username 		TEXT NOT NULL UNIQUE,
+	pass_hash 		TEXT NOT NULL,
+	created_at 		TIMESTAMP NOT NULL DEFAULT now()
+);
+
 CREATE TABLE accounts (
 	account_id		SERIAL PRIMARY KEY,
 	user_id 		INTEGER NOT NULL REFERENCES user_info(user_id),
 	balance			NUMERIC(18, 4) NOT NULL DEFAULT 0,
-	role 			TEXT NOT NULL CHECK (role IN ('USER', 'ADMIN', 'ANALYTIC')),
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('Low', 'Balanced', 'High')),
+	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -64,3 +73,12 @@ CREATE TABLE transactions(
 	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWL', 'DEPOSIT')),
 	happened_at			TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE TABLE historical_orders(
+    historical_order_id     SERIAL PRIMARY KEY,
+    order_id                INTEGER NOT NULL REFERENCES orders(order_id),
+    account_id              INTEGER NOT NULL REFERENCES accounts(account_id),
+    order_information_json  JSONB NOT NULL,
+    created_at              TIMESTAMP NOT NULL DEFAULT now()
+);
+
