@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS positions;
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
+DROP TABLE IF EXISTS admin;
 CREATE TABLE user_info(
 	user_id 		SERIAL PRIMARY KEY,
 	name			TEXT NOT NULL,
@@ -13,6 +14,13 @@ CREATE TABLE user_info(
 	address			TEXT NOT NULL,
 	ssn_hash		TEXT NOT NULL UNIQUE,
 	pass_hash		TEXT NOT NULL
+);
+
+CREATE TABLE admin(
+	admin_id		SERIAL PRIMARY KEY,
+	username 		TEXT NOT NULL UNIQUE,
+	pass_hash 		TEXT NOT NULL,
+	created_at 		TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE accounts (
@@ -73,3 +81,4 @@ CREATE TABLE historical_orders(
     order_information_json  JSONB NOT NULL,
     created_at              TIMESTAMP NOT NULL DEFAULT now()
 );
+

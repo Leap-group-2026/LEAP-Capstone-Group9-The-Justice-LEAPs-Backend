@@ -82,3 +82,5 @@ SELECT
     to_jsonb(o),
     NOW()
 FROM orders o;
+
+INSERT INTO admin (username, pass_hash, created_at) VALUES ('admin', '$2b$12$fakehash', NOW());
