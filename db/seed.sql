@@ -83,4 +83,4 @@ SELECT
     NOW()
 FROM orders o;
 
-INSERT INTO admin (username, pass_hash, created_at) VALUES ('admin', '$2b$12$fakehash', NOW());
+INSERT INTO admin (email, pass_hash, created_at) VALUES ('admin@example.com', '$2b$12$fakehash', NOW());

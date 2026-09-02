@@ -18,7 +18,7 @@ CREATE TABLE user_info(
 
 CREATE TABLE admin(
 	admin_id		SERIAL PRIMARY KEY,
-	username 		TEXT NOT NULL UNIQUE,
+	email 			TEXT NOT NULL UNIQUE,
 	pass_hash 		TEXT NOT NULL,
 	created_at 		TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -81,4 +81,18 @@ CREATE TABLE historical_orders(
     order_information_json  JSONB NOT NULL,
     created_at              TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE INDEX idx_accounts_user_id ON accounts(user_id);
+
+CREATE INDEX idx_positions_account_id ON positions(account_id);
+CREATE INDEX idx_positions_open ON positions(account_id) WHERE closed_at IS NULL;
+
+CREATE INDEX idx_orders_account_id ON orders(account_id);
+CREATE INDEX idx_orders_instrument_id ON orders(instrument_id);
+
+CREATE INDEX idx_transactions_account_id ON transactions(account_id);
+
+CREATE INDEX idx_historical_order_id ON historical_orders(order_id);
+CREATE INDEX idx_historical_orders_account_id ON historical_orders(account_id);
+
 
