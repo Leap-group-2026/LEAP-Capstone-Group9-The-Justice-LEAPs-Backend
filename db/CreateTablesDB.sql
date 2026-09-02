@@ -27,7 +27,6 @@ CREATE TABLE accounts (
 	account_id		SERIAL PRIMARY KEY,
 	user_id 		INTEGER NOT NULL REFERENCES user_info(user_id),
 	balance			NUMERIC(18, 4) NOT NULL DEFAULT 0,
-	role 			TEXT NOT NULL CHECK (role IN ('USER', 'ADMIN', 'ANALYTIC')),
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('Low', 'Balanced', 'High')),
 	created_at		TIMESTAMP NOT NULL DEFAULT now()
 );
