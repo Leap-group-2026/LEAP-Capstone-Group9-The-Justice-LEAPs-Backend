@@ -29,7 +29,8 @@ CREATE TABLE accounts (
 	balance			NUMERIC(18, 4) NOT NULL DEFAULT 0,
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('Low', 'Balanced', 'High')),
 	trade_type      TEXT NOT NULL,
-	created_at		TIMESTAMP NOT NULL DEFAULT now()
+	created_at		TIMESTAMP NOT NULL DEFAULT now(),
+	account_active  BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE instruments (
