@@ -13,7 +13,8 @@ CREATE TABLE user_info(
 	date_of_birth	DATE NOT NULL,
 	address			TEXT NOT NULL,
 	ssn_hash		TEXT NOT NULL UNIQUE,
-	pass_hash		TEXT NOT NULL
+	pass_hash		TEXT NOT NULL,
+	code			VARHCAR(6)
 );
 
 CREATE TABLE admin(
