@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS current_prices;
 
 
 CREATE TABLE user_info(
@@ -41,7 +42,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE instruments (
 	instrument_id	SERIAL PRIMARY KEY,
-    ticker			TEXT NOT NULL,
+    ticker			TEXT NOT NULL UNIQUE,
 	asset_type		TEXT NOT NULL,
 	asset_name		TEXT NOT NULL,
 	currency 		TEXT NOT NULL DEFAULT 'USD'
