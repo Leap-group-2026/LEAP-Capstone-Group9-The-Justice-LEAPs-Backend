@@ -15,19 +15,25 @@ INSERT INTO accounts (user_id, balance, portfolio_size, trade_type, created_at, 
 SELECT
     i,
     round((random() * 100000)::numeric, 4),
-    (ARRAY['Low', 'Balanced', 'High'])[floor(random() * 3 + 1)],
+    (ARRAY['LOW', 'BALANCED', 'HIGH'])[floor(random() * 3 + 1)],
     (ARRAY['Stocks', 'Bonds', 'ETC'])[floor(random() * 2 + 1)],
     NOW() - (random() * INTERVAL '365 days'),
     TRUE
 FROM generate_series(1, 100) AS i;
 
-INSERT INTO instruments (asset_type, asset_name, ticker, price, currency)
+INSERT INTO instruments (ticker, asset_type, asset_name, currency)
 SELECT
+    'TCK' || i,
     (ARRAY['STOCK', 'CRYPTO', 'ETF', 'BOND'])[floor(random() * 4 + 1)],
     'SYM' || i,
-    'TCK' || i,
-    round((random() * 990 + 10)::numeric, 4),
     'USD'
+FROM generate_series(1, 100) AS i;
+
+INSERT INTO current_prices (instrument_id, price, quote_time)
+SELECT
+    i,
+    round((random() * 990 + 10)::numeric, 4),
+    NOW()
 FROM generate_series(1, 100) AS i;
 
 INSERT INTO positions (account_id, quantity, instrument_id, opened_at, closed_at, total_price, average_price)
@@ -72,7 +78,7 @@ SELECT
     round((random() * 5000 + 10)::numeric, 4),
     (ARRAY['IN', 'OUT'])[floor(random() * 2 + 1)],
     floor(random() * 100 + 1)::int,
-    (ARRAY['TRADE', 'WITHDRAWL', 'DEPOSIT'])[floor(random() * 3 + 1)],
+    (ARRAY['TRADE', 'WITHDRAWAL', 'DEPOSIT'])[floor(random() * 3 + 1)],
     NOW() - (random() * INTERVAL '365 days')
 FROM generate_series(1, 100) AS i;
 

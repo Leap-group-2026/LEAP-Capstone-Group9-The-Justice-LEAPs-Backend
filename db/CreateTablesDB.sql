@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
+
+
 CREATE TABLE user_info(
 	user_id 		SERIAL PRIMARY KEY,
 	name			TEXT NOT NULL,
@@ -14,7 +16,7 @@ CREATE TABLE user_info(
 	address			TEXT NOT NULL,
 	ssn_hash		TEXT NOT NULL UNIQUE,
 	pass_hash		TEXT NOT NULL,
-	code			VARHCAR(6)
+	code			VARCHAR(6)
 );
 
 CREATE TABLE admin(
@@ -28,19 +30,28 @@ CREATE TABLE accounts (
 	account_id		SERIAL PRIMARY KEY,
 	user_id 		INTEGER NOT NULL REFERENCES user_info(user_id),
 	balance			NUMERIC(18, 4) NOT NULL DEFAULT 0,
-	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('Low', 'Balanced', 'High')),
+	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('LOW', 'BALANCED', 'HIGH')),
 	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now(),
 	account_active  BOOLEAN NOT NULL DEFAULT TRUE
 );
+
+-- Reference data only. Instrument existing here making it tradable
+-- see current_prices for market price
 
 CREATE TABLE instruments (
 	instrument_id	SERIAL PRIMARY KEY,
     ticker			TEXT NOT NULL,
 	asset_type		TEXT NOT NULL,
 	asset_name		TEXT NOT NULL,
-	price			NUMERIC(18, 4) NOT NULL DEFAULT 0,
 	currency 		TEXT NOT NULL DEFAULT 'USD'
+);
+
+CREATE TABLE current_prices (
+	instrument_id	INTEGER PRIMARY KEY REFERENCES instruments(instrument_id),
+	price			NUMERIC(18, 4) NOT NULL CHECK (price > 0),
+	quote_time		TIMESTAMPTZ NOT NULL,
+	retrieved_at	TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE positions (
@@ -72,7 +83,7 @@ CREATE TABLE transactions(
 	amount				NUMERIC(18, 4) NOT NULL,
 	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN')),
 	account_id			INTEGER NOT NULL REFERENCES accounts(account_id),
-	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWL', 'DEPOSIT')),
+	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWAL', 'DEPOSIT')),
 	happened_at			TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -85,6 +96,7 @@ CREATE TABLE historical_orders(
 );
 
 CREATE INDEX idx_accounts_user_id ON accounts(user_id);
+CREATE INDEX idx_accounts_active ON accounts(user_id) WHERE account_active = true;
 
 CREATE INDEX idx_positions_account_id ON positions(account_id);
 CREATE INDEX idx_positions_open ON positions(account_id) WHERE closed_at IS NULL;
