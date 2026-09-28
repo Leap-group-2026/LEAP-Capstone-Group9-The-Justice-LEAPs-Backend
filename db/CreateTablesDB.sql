@@ -3,10 +3,10 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS positions;
 DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS current_prices;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS current_prices;
 
 
 CREATE TABLE user_info(
