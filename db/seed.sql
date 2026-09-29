@@ -11,10 +11,11 @@ VALUES
     ('David Brown', 'david.brown@example.com', '1987-09-25', '654 Maple Dr, Phoenix, AZ 85001', 'hash_ssn_005', 'hash_pass_005', NULL);
 
 -- Insert Admin
-INSERT INTO admin (email, pass_hash, created_at)
+INSERT INTO admin (email, pass_hash, role, created_at)
 VALUES
-    ('admin@justiceleaps.com', 'hash_admin_001', now()),
-    ('superadmin@justiceleaps.com', 'hash_admin_002', now() - INTERVAL '30 days');
+    ('admin@justiceleaps.com', 'hash_admin_001', 'ADMIN', now()),
+    ('superadmin@justiceleaps.com', 'hash_admin_002', 'SUPER ADMIN', now() - INTERVAL '30 days'),
+    ('analyst@justiceleaps.com', 'hash_analyst_001', 'ANALYST', now() - INTERVAL '15 days');
 
 -- Insert Accounts
 INSERT INTO accounts (user_id, balance, portfolio_size, trade_type, created_at, account_active)
