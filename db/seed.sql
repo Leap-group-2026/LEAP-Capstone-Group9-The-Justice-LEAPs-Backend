@@ -201,20 +201,25 @@ VALUES
 -- Insert Transactions
 INSERT INTO transactions (amount, side, account_id, transaction_type, happened_at)
 VALUES
-    (50000.00, 'IN', 1, 'DEPOSIT', now() - INTERVAL '90 days'),
-    (8755.00, 'OUT', 1, 'TRADE', now() - INTERVAL '30 days'),
-    (10518.75, 'OUT', 1, 'TRADE', now() - INTERVAL '25 days'),
-    (100000.00, 'IN', 2, 'DEPOSIT', now() - INTERVAL '120 days'),
-    (926.50, 'IN', 2, 'TRADE', now() - INTERVAL '20 days'),
-    (75000.00, 'IN', 3, 'DEPOSIT', now() - INTERVAL '45 days'),
-    (1628.00, 'OUT', 3, 'TRADE', now() - INTERVAL '60 days'),
-    (4918.00, 'OUT', 3, 'TRADE', now() - INTERVAL '45 days'),
-    (30000.00, 'IN', 4, 'DEPOSIT', now() - INTERVAL '15 days'),
-    (22806.00, 'OUT', 4, 'TRADE', now() - INTERVAL '5 days'),
-    (50000.00, 'IN', 5, 'DEPOSIT', now() - INTERVAL '30 days'),
-    (3316.00, 'OUT', 5, 'TRADE', now() - INTERVAL '10 days'),
-    (5000.00, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '20 days'),
-    (2000.00, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '35 days');
+    (50000.0000, 'IN', 1, 'DEPOSIT', now() - INTERVAL '90 days'),
+    (2500.0000, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '85 days'),
+    (8755.0000, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '30 days'),
+    (10518.7500, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '25 days'),
+    (2000.0000, 'EXCHANGE', 1, 'CURRENCY EXCHANGE', now() - INTERVAL '7 days'),
+    (100000.0000, 'IN', 2, 'DEPOSIT', now() - INTERVAL '120 days'),
+    (926.5000, 'IN', 2, 'DEPOSIT', now() - INTERVAL '20 days'),
+    (1200.0000, 'EXCHANGE', 2, 'CURRENCY EXCHANGE', now() - INTERVAL '6 days'),
+    (75000.0000, 'IN', 3, 'DEPOSIT', now() - INTERVAL '45 days'),
+    (1628.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '60 days'),
+    (4918.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '45 days'),
+    (2000.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '35 days'),
+    (30000.0000, 'IN', 4, 'DEPOSIT', now() - INTERVAL '15 days'),
+    (2778.0000, 'OUT', 4, 'WITHDRAWAL', now() - INTERVAL '10 days'),
+    (22806.0000, 'OUT', 4, 'WITHDRAWAL', now() - INTERVAL '5 days'),
+    (5000.0000, 'EXCHANGE', 4, 'CURRENCY EXCHANGE', now() - INTERVAL '3 days'),
+    (50000.0000, 'IN', 5, 'DEPOSIT', now() - INTERVAL '30 days'),
+    (3316.0000, 'IN', 5, 'DEPOSIT', now() - INTERVAL '10 days'),
+    (1500.0000, 'OUT', 5, 'WITHDRAWAL', now() - INTERVAL '8 days');
 
 -- Insert Historical Orders
 INSERT INTO historical_orders (order_id, account_id, order_information_json, created_at)

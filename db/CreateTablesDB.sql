@@ -83,9 +83,9 @@ CREATE TABLE orders (
 CREATE TABLE transactions(
 	transaction_id		SERIAL PRIMARY KEY,
 	amount				NUMERIC(18, 4) NOT NULL,
-	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN')),
+	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN', 'EXCHANGE')),
 	account_id			INTEGER NOT NULL REFERENCES accounts(account_id),
-	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWAL', 'DEPOSIT')),
+	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('WITHDRAWAL', 'DEPOSIT', 'CURRENCY EXCHANGE')),
 	happened_at			TIMESTAMP NOT NULL DEFAULT now()
 );
 
