@@ -80,7 +80,23 @@ VALUES
     ('SO', 'STOCK', 'Southern Company', 'USD'),
     ('EOG', 'STOCK', 'EOG Resources Inc.', 'USD'),
     ('PSX', 'STOCK', 'Phillips 66', 'USD'),
-    ('OXY', 'STOCK', 'Occidental Petroleum Corporation', 'USD');
+    ('OXY', 'STOCK', 'Occidental Petroleum Corporation', 'USD'),
+    ('BTC/USD', 'CRYPTO', 'Bitcoin', 'USD'),
+    ('ETH/USD', 'CRYPTO', 'Ethereum', 'USD'),
+    ('SOL/USD', 'CRYPTO', 'Solana', 'USD'),
+    ('XRP/USD', 'CRYPTO', 'Ripple', 'USD'),
+    ('BNB/USD', 'CRYPTO', 'Binance Coin', 'USD'),
+    ('DOGE/USD', 'CRYPTO', 'Dogecoin', 'USD'),
+    ('ADA/USD', 'CRYPTO', 'Cardano', 'USD'),
+    ('AVAX/USD', 'CRYPTO', 'Avalanche', 'USD'),
+    ('LINK/USD', 'CRYPTO', 'Chainlink', 'USD'),
+    ('LTC/USD', 'CRYPTO', 'Litecoin', 'USD'),
+    ('USD/AUD', 'FOREX', 'USD to AUD', 'USD'),
+    ('USD/CAD', 'FOREX', 'USD to CAD', 'USD'),
+    ('USD/EUR', 'FOREX', 'USD to EUR', 'USD'),
+    ('USD/GBP', 'FOREX', 'USD to GBP', 'USD'),
+    ('USD/INR', 'FOREX', 'USD to INR', 'USD'),
+    ('USD/JPY', 'FOREX', 'USD to JPY', 'USD');
 
 -- Insert Current Prices
 INSERT INTO current_prices (instrument_id, price, quote_time, retrieved_at)
@@ -134,7 +150,23 @@ VALUES
     (47, 155.90, now() - INTERVAL '1 hour', now()),
     (48, 95.60, now() - INTERVAL '1 hour', now()),
     (49, 125.40, now() - INTERVAL '1 hour', now()),
-    (50, 65.15, now() - INTERVAL '1 hour', now());
+    (50, 65.15, now() - INTERVAL '1 hour', now()),
+    (51, 67250.50, now() - INTERVAL '1 hour', now()),
+    (52, 2691.75, now() - INTERVAL '1 hour', now()),
+    (53, 178.45, now() - INTERVAL '1 hour', now()),
+    (54, 2.48, now() - INTERVAL '1 hour', now()),
+    (55, 618.20, now() - INTERVAL '1 hour', now()),
+    (56, 0.32, now() - INTERVAL '1 hour', now()),
+    (57, 1.05, now() - INTERVAL '1 hour', now()),
+    (58, 35.80, now() - INTERVAL '1 hour', now()),
+    (59, 28.50, now() - INTERVAL '1 hour', now()),
+    (60, 84.75, now() - INTERVAL '1 hour', now()),
+    (61, 1.4265, now() - INTERVAL '1 hour', now()),
+    (62, 1.4166, now() - INTERVAL '1 hour', now()),
+    (63, 0.87946, now() - INTERVAL '1 hour', now()),
+    (64, 0.75403, now() - INTERVAL '1 hour', now()),
+    (65, 95.92, now() - INTERVAL '1 hour', now()),
+    (66, 157.33, now() - INTERVAL '1 hour', now());
 
 -- Insert Positions
 INSERT INTO positions (account_id, quantity, instrument_id, opened_at, closed_at, total_price, average_price)
