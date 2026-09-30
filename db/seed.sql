@@ -80,7 +80,23 @@ VALUES
     ('SO', 'STOCK', 'Southern Company', 'USD'),
     ('EOG', 'STOCK', 'EOG Resources Inc.', 'USD'),
     ('PSX', 'STOCK', 'Phillips 66', 'USD'),
-    ('OXY', 'STOCK', 'Occidental Petroleum Corporation', 'USD');
+    ('OXY', 'STOCK', 'Occidental Petroleum Corporation', 'USD'),
+    ('BTC/USD', 'CRYPTO', 'Bitcoin', 'USD'),
+    ('ETH/USD', 'CRYPTO', 'Ethereum', 'USD'),
+    ('SOL/USD', 'CRYPTO', 'Solana', 'USD'),
+    ('XRP/USD', 'CRYPTO', 'Ripple', 'USD'),
+    ('BNB/USD', 'CRYPTO', 'Binance Coin', 'USD'),
+    ('DOGE/USD', 'CRYPTO', 'Dogecoin', 'USD'),
+    ('ADA/USD', 'CRYPTO', 'Cardano', 'USD'),
+    ('AVAX/USD', 'CRYPTO', 'Avalanche', 'USD'),
+    ('LINK/USD', 'CRYPTO', 'Chainlink', 'USD'),
+    ('LTC/USD', 'CRYPTO', 'Litecoin', 'USD'),
+    ('USD/AUD', 'FOREX', 'USD to AUD', 'USD'),
+    ('USD/CAD', 'FOREX', 'USD to CAD', 'USD'),
+    ('USD/EUR', 'FOREX', 'USD to EUR', 'USD'),
+    ('USD/GBP', 'FOREX', 'USD to GBP', 'USD'),
+    ('USD/INR', 'FOREX', 'USD to INR', 'USD'),
+    ('USD/JPY', 'FOREX', 'USD to JPY', 'USD');
 
 -- Insert Current Prices
 INSERT INTO current_prices (instrument_id, price, quote_time, retrieved_at)
@@ -134,7 +150,23 @@ VALUES
     (47, 155.90, now() - INTERVAL '1 hour', now()),
     (48, 95.60, now() - INTERVAL '1 hour', now()),
     (49, 125.40, now() - INTERVAL '1 hour', now()),
-    (50, 65.15, now() - INTERVAL '1 hour', now());
+    (50, 65.15, now() - INTERVAL '1 hour', now()),
+    (51, 67250.50, now() - INTERVAL '1 hour', now()),
+    (52, 2691.75, now() - INTERVAL '1 hour', now()),
+    (53, 178.45, now() - INTERVAL '1 hour', now()),
+    (54, 2.48, now() - INTERVAL '1 hour', now()),
+    (55, 618.20, now() - INTERVAL '1 hour', now()),
+    (56, 0.32, now() - INTERVAL '1 hour', now()),
+    (57, 1.05, now() - INTERVAL '1 hour', now()),
+    (58, 35.80, now() - INTERVAL '1 hour', now()),
+    (59, 28.50, now() - INTERVAL '1 hour', now()),
+    (60, 84.75, now() - INTERVAL '1 hour', now()),
+    (61, 1.4265, now() - INTERVAL '1 hour', now()),
+    (62, 1.4166, now() - INTERVAL '1 hour', now()),
+    (63, 0.87946, now() - INTERVAL '1 hour', now()),
+    (64, 0.75403, now() - INTERVAL '1 hour', now()),
+    (65, 95.92, now() - INTERVAL '1 hour', now()),
+    (66, 157.33, now() - INTERVAL '1 hour', now());
 
 -- Insert Positions
 INSERT INTO positions (account_id, quantity, instrument_id, opened_at, closed_at, total_price, average_price)
@@ -169,20 +201,25 @@ VALUES
 -- Insert Transactions
 INSERT INTO transactions (amount, side, account_id, transaction_type, happened_at)
 VALUES
-    (50000.00, 'IN', 1, 'DEPOSIT', now() - INTERVAL '90 days'),
-    (8755.00, 'OUT', 1, 'TRADE', now() - INTERVAL '30 days'),
-    (10518.75, 'OUT', 1, 'TRADE', now() - INTERVAL '25 days'),
-    (100000.00, 'IN', 2, 'DEPOSIT', now() - INTERVAL '120 days'),
-    (926.50, 'IN', 2, 'TRADE', now() - INTERVAL '20 days'),
-    (75000.00, 'IN', 3, 'DEPOSIT', now() - INTERVAL '45 days'),
-    (1628.00, 'OUT', 3, 'TRADE', now() - INTERVAL '60 days'),
-    (4918.00, 'OUT', 3, 'TRADE', now() - INTERVAL '45 days'),
-    (30000.00, 'IN', 4, 'DEPOSIT', now() - INTERVAL '15 days'),
-    (22806.00, 'OUT', 4, 'TRADE', now() - INTERVAL '5 days'),
-    (50000.00, 'IN', 5, 'DEPOSIT', now() - INTERVAL '30 days'),
-    (3316.00, 'OUT', 5, 'TRADE', now() - INTERVAL '10 days'),
-    (5000.00, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '20 days'),
-    (2000.00, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '35 days');
+    (50000.0000, 'IN', 1, 'DEPOSIT', now() - INTERVAL '90 days'),
+    (2500.0000, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '85 days'),
+    (8755.0000, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '30 days'),
+    (10518.7500, 'OUT', 1, 'WITHDRAWAL', now() - INTERVAL '25 days'),
+    (2000.0000, 'EXCHANGE', 1, 'CURRENCY EXCHANGE', now() - INTERVAL '7 days'),
+    (100000.0000, 'IN', 2, 'DEPOSIT', now() - INTERVAL '120 days'),
+    (926.5000, 'IN', 2, 'DEPOSIT', now() - INTERVAL '20 days'),
+    (1200.0000, 'EXCHANGE', 2, 'CURRENCY EXCHANGE', now() - INTERVAL '6 days'),
+    (75000.0000, 'IN', 3, 'DEPOSIT', now() - INTERVAL '45 days'),
+    (1628.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '60 days'),
+    (4918.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '45 days'),
+    (2000.0000, 'OUT', 3, 'WITHDRAWAL', now() - INTERVAL '35 days'),
+    (30000.0000, 'IN', 4, 'DEPOSIT', now() - INTERVAL '15 days'),
+    (2778.0000, 'OUT', 4, 'WITHDRAWAL', now() - INTERVAL '10 days'),
+    (22806.0000, 'OUT', 4, 'WITHDRAWAL', now() - INTERVAL '5 days'),
+    (5000.0000, 'EXCHANGE', 4, 'CURRENCY EXCHANGE', now() - INTERVAL '3 days'),
+    (50000.0000, 'IN', 5, 'DEPOSIT', now() - INTERVAL '30 days'),
+    (3316.0000, 'IN', 5, 'DEPOSIT', now() - INTERVAL '10 days'),
+    (1500.0000, 'OUT', 5, 'WITHDRAWAL', now() - INTERVAL '8 days');
 
 -- Insert Historical Orders
 INSERT INTO historical_orders (order_id, account_id, order_information_json, created_at)
