@@ -3,9 +3,12 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS positions;
 DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS current_prices;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
+
+
 CREATE TABLE user_info(
 	user_id 		SERIAL PRIMARY KEY,
 	name			TEXT NOT NULL,
@@ -13,13 +16,15 @@ CREATE TABLE user_info(
 	date_of_birth	DATE NOT NULL,
 	address			TEXT NOT NULL,
 	ssn_hash		TEXT NOT NULL UNIQUE,
-	pass_hash		TEXT NOT NULL
+	pass_hash		TEXT NOT NULL,
+	code			VARCHAR(6)
 );
 
 CREATE TABLE admin(
 	admin_id		SERIAL PRIMARY KEY,
-	username 		TEXT NOT NULL UNIQUE,
+	email 			TEXT NOT NULL UNIQUE,
 	pass_hash 		TEXT NOT NULL,
+	role			TEXT NOT NULL,
 	created_at 		TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -27,18 +32,28 @@ CREATE TABLE accounts (
 	account_id		SERIAL PRIMARY KEY,
 	user_id 		INTEGER NOT NULL REFERENCES user_info(user_id),
 	balance			NUMERIC(18, 4) NOT NULL DEFAULT 0,
-	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('Low', 'Balanced', 'High')),
+	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('LOW', 'BALANCED', 'HIGH')),
 	trade_type      TEXT NOT NULL,
-	created_at		TIMESTAMP NOT NULL DEFAULT now()
+	created_at		TIMESTAMP NOT NULL DEFAULT now(),
+	account_active  BOOLEAN NOT NULL DEFAULT TRUE
 );
+
+-- Reference data only. Instrument existing here making it tradable
+-- see current_prices for market price
 
 CREATE TABLE instruments (
 	instrument_id	SERIAL PRIMARY KEY,
-    ticker			TEXT NOT NULL,
+    ticker			TEXT NOT NULL UNIQUE,
 	asset_type		TEXT NOT NULL,
 	asset_name		TEXT NOT NULL,
-	price			NUMERIC(18, 4) NOT NULL DEFAULT 0,
 	currency 		TEXT NOT NULL DEFAULT 'USD'
+);
+
+CREATE TABLE current_prices (
+	instrument_id	INTEGER PRIMARY KEY REFERENCES instruments(instrument_id),
+	price			NUMERIC(18, 4) NOT NULL CHECK (price > 0),
+	quote_time		TIMESTAMPTZ NOT NULL,
+	retrieved_at	TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE positions (
@@ -68,9 +83,9 @@ CREATE TABLE orders (
 CREATE TABLE transactions(
 	transaction_id		SERIAL PRIMARY KEY,
 	amount				NUMERIC(18, 4) NOT NULL,
-	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN')),
+	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN', 'EXCHANGE')),
 	account_id			INTEGER NOT NULL REFERENCES accounts(account_id),
-	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('TRADE', 'WITHDRAWL', 'DEPOSIT')),
+	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('WITHDRAWAL', 'DEPOSIT', 'CURRENCY EXCHANGE')),
 	happened_at			TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -81,4 +96,19 @@ CREATE TABLE historical_orders(
     order_information_json  JSONB NOT NULL,
     created_at              TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE INDEX idx_accounts_user_id ON accounts(user_id);
+CREATE INDEX idx_accounts_active ON accounts(user_id) WHERE account_active = true;
+
+CREATE INDEX idx_positions_account_id ON positions(account_id);
+CREATE INDEX idx_positions_open ON positions(account_id) WHERE closed_at IS NULL;
+
+CREATE INDEX idx_orders_account_id ON orders(account_id);
+CREATE INDEX idx_orders_instrument_id ON orders(instrument_id);
+
+CREATE INDEX idx_transactions_account_id ON transactions(account_id);
+
+CREATE INDEX idx_historical_order_id ON historical_orders(order_id);
+CREATE INDEX idx_historical_orders_account_id ON historical_orders(account_id);
+
 
