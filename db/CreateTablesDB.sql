@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS current_prices;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS current_prices;
+DROP TABLE IF EXISTS refresh_tokens;
 
 
 CREATE TABLE user_info(
@@ -96,6 +98,20 @@ CREATE TABLE historical_orders(
     order_information_json  JSONB NOT NULL,
     created_at              TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE TABLE refresh_tokens (
+	token_hash		TEXT PRIMARY KEY CHECK (char_length(token_hash) = 64),	
+	session_id		UUID NOT NULL,		
+	user_id			INTEGER REFERENCES user_info(user_id) ON DELETE CASCADE,
+	admin_id		INTEGER REFERENCES admin(admin_id) ON DELETE CASCADE,
+	auth_time		TIMESTAMPTZ NOT NULL,		
+	expires_at		TIMESTAMPTZ NOT NULL,	
+	revoked_at		TIMESTAMPTZ,
+	created_at		TIMESTAMPTZ NOT NULL DEFAULT now(),
+	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
+);
+
+CREATE INDEX idx_refresh_tokens_session_id ON refresh_tokens(session_id);
 
 CREATE INDEX idx_accounts_user_id ON accounts(user_id);
 CREATE INDEX idx_accounts_active ON accounts(user_id) WHERE account_active = true;
