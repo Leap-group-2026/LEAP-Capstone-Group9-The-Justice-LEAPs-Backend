@@ -111,6 +111,25 @@ CREATE TABLE refresh_tokens (
 	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
 );
 
+CREATE TABLE IF NOT EXISTS user_sessions (
+    session_id        UUID PRIMARY KEY,
+    user_id           INTEGER REFERENCES user_info(user_id) ON DELETE CASCADE,
+    admin_id          INTEGER REFERENCES admin(admin_id) ON DELETE CASCADE,
+    role              TEXT NOT NULL,
+    created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+    last_activity_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    expires_at        TIMESTAMPTZ NOT NULL,
+    revoked_at        TIMESTAMPTZ,
+    revoked_reason    TEXT,
+    CHECK ((user_id IS NULL) <> (admin_id IS NULL))
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id
+    ON user_sessions(user_id) WHERE user_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_user_sessions_admin_id
+    ON user_sessions(admin_id) WHERE admin_id IS NOT NULL;
+
 CREATE INDEX idx_refresh_tokens_session_id ON refresh_tokens(session_id);
 
 CREATE INDEX idx_accounts_user_id ON accounts(user_id);
