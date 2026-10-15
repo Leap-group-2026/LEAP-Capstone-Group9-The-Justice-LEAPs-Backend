@@ -111,7 +111,7 @@ CREATE TABLE refresh_tokens (
 	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
 );
 
-CREATE TABLE IF NOT EXISTS user_sessions (
+CREATE TABLE user_sessions (
     session_id        UUID PRIMARY KEY,
     user_id           INTEGER REFERENCES user_info(user_id) ON DELETE CASCADE,
     admin_id          INTEGER REFERENCES admin(admin_id) ON DELETE CASCADE,
