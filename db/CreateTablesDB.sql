@@ -35,7 +35,8 @@ CREATE TABLE accounts (
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('LOW', 'BALANCED', 'HIGH')),
 	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now(),
-	account_active  BOOLEAN NOT NULL DEFAULT TRUE
+	account_active  BOOLEAN NOT NULL DEFAULT TRUE,
+	account_frozen  BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Reference data only. Instrument existing here making it tradable
