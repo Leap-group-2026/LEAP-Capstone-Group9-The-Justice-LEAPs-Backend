@@ -111,6 +111,13 @@ CREATE TABLE refresh_tokens (
 	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
 );
 
+CREATE TABLE portfolio_snapshot(
+	portfolio_snapshot_id	SERIAL PRIMARY KEY,
+	account_id				INTEGER NOT NULL REFERENCES accounts(account_id),
+	portfolio_value			DECIMAL(19,4) NOT NULL,
+	snapshot_date 			DATE NOT NULL,
+)
+
 CREATE INDEX idx_refresh_tokens_session_id ON refresh_tokens(session_id);
 
 CREATE INDEX idx_accounts_user_id ON accounts(user_id);
