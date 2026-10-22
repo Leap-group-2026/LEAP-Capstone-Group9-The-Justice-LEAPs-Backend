@@ -38,7 +38,8 @@ CREATE TABLE accounts (
 	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now(),
 	account_active  BOOLEAN NOT NULL DEFAULT TRUE,
-	account_frozen  BOOLEAN NOT NULL DEFAULT FALSE
+	account_frozen  BOOLEAN NOT NULL DEFAULT FALSE,
+	account_name	TEXT
 );
 
 -- Reference data only. Instrument existing here making it tradable
