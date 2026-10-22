@@ -37,7 +37,9 @@ CREATE TABLE accounts (
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('LOW', 'BALANCED', 'HIGH')),
 	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now(),
-	account_active  BOOLEAN NOT NULL DEFAULT TRUE
+	account_active  BOOLEAN NOT NULL DEFAULT TRUE,
+	account_frozen  BOOLEAN NOT NULL DEFAULT FALSE,
+	account_name	TEXT
 );
 
 -- Reference data only. Instrument existing here making it tradable
@@ -111,24 +113,12 @@ CREATE TABLE refresh_tokens (
 	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
 );
 
-CREATE TABLE user_sessions (
-    session_id        UUID PRIMARY KEY,
-    user_id           INTEGER REFERENCES user_info(user_id) ON DELETE CASCADE,
-    admin_id          INTEGER REFERENCES admin(admin_id) ON DELETE CASCADE,
-    role              TEXT NOT NULL,
-    created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
-    last_activity_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    expires_at        TIMESTAMPTZ NOT NULL,
-    revoked_at        TIMESTAMPTZ,
-    revoked_reason    TEXT,
-    CHECK ((user_id IS NULL) <> (admin_id IS NULL))
-);
-
-CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id
-    ON user_sessions(user_id) WHERE user_id IS NOT NULL;
-
-CREATE INDEX IF NOT EXISTS idx_user_sessions_admin_id
-    ON user_sessions(admin_id) WHERE admin_id IS NOT NULL;
+CREATE TABLE portfolio_snapshot(
+	portfolio_snapshot_id	SERIAL PRIMARY KEY,
+	account_id				INTEGER NOT NULL REFERENCES accounts(account_id),
+	portfolio_value			DECIMAL(19,4) NOT NULL,
+	snapshot_date 			DATE NOT NULL,
+)
 
 CREATE INDEX idx_refresh_tokens_session_id ON refresh_tokens(session_id);
 
@@ -145,5 +135,4 @@ CREATE INDEX idx_transactions_account_id ON transactions(account_id);
 
 CREATE INDEX idx_historical_order_id ON historical_orders(order_id);
 CREATE INDEX idx_historical_orders_account_id ON historical_orders(account_id);
-
 
