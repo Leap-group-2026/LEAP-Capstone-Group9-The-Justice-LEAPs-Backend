@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS current_prices;
 DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS user_info;
 DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS current_prices;
+DROP TABLE IF EXISTS refresh_tokens;
 
 
 CREATE TABLE user_info(
@@ -35,7 +37,9 @@ CREATE TABLE accounts (
 	portfolio_size	TEXT NOT NULL CHECK(portfolio_size IN ('LOW', 'BALANCED', 'HIGH')),
 	trade_type      TEXT NOT NULL,
 	created_at		TIMESTAMP NOT NULL DEFAULT now(),
-	account_active  BOOLEAN NOT NULL DEFAULT TRUE
+	account_active  BOOLEAN NOT NULL DEFAULT TRUE,
+	account_frozen  BOOLEAN NOT NULL DEFAULT FALSE,
+	account_name	TEXT
 );
 
 -- Reference data only. Instrument existing here making it tradable
@@ -86,7 +90,8 @@ CREATE TABLE transactions(
 	side				TEXT NOT NULL CHECK(side IN('OUT', 'IN', 'EXCHANGE')),
 	account_id			INTEGER NOT NULL REFERENCES accounts(account_id),
 	transaction_type	TEXT NOT NULL CHECK(transaction_type IN('WITHDRAWAL', 'DEPOSIT', 'CURRENCY EXCHANGE')),
-	happened_at			TIMESTAMP NOT NULL DEFAULT now()
+	happened_at			TIMESTAMP NOT NULL DEFAULT now(),
+	currency			TEXT
 );
 
 CREATE TABLE historical_orders(
@@ -96,6 +101,27 @@ CREATE TABLE historical_orders(
     order_information_json  JSONB NOT NULL,
     created_at              TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE TABLE refresh_tokens (
+	token_hash		TEXT PRIMARY KEY CHECK (char_length(token_hash) = 64),	
+	session_id		UUID NOT NULL,		
+	user_id			INTEGER REFERENCES user_info(user_id) ON DELETE CASCADE,
+	admin_id		INTEGER REFERENCES admin(admin_id) ON DELETE CASCADE,
+	auth_time		TIMESTAMPTZ NOT NULL,		
+	expires_at		TIMESTAMPTZ NOT NULL,	
+	revoked_at		TIMESTAMPTZ,
+	created_at		TIMESTAMPTZ NOT NULL DEFAULT now(),
+	CHECK ((user_id IS NULL) <> (admin_id IS NULL))	
+);
+
+CREATE TABLE portfolio_snapshot(
+	portfolio_snapshot_id	SERIAL PRIMARY KEY,
+	account_id				INTEGER NOT NULL REFERENCES accounts(account_id),
+	portfolio_value			DECIMAL(19,4) NOT NULL,
+	snapshot_date 			DATE NOT NULL,
+)
+
+CREATE INDEX idx_refresh_tokens_session_id ON refresh_tokens(session_id);
 
 CREATE INDEX idx_accounts_user_id ON accounts(user_id);
 CREATE INDEX idx_accounts_active ON accounts(user_id) WHERE account_active = true;
@@ -110,5 +136,4 @@ CREATE INDEX idx_transactions_account_id ON transactions(account_id);
 
 CREATE INDEX idx_historical_order_id ON historical_orders(order_id);
 CREATE INDEX idx_historical_orders_account_id ON historical_orders(account_id);
-
 
